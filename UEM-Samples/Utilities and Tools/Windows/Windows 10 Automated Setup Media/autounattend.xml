@@ -1,113 +1,144 @@
-<?xml version='1.0' encoding='utf-8'?>
-<!-- This XML is for EFI partitioning only -->
-<unattend xmlns="urn:schemas-microsoft-com:unattend" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State">
-
-  <settings pass="windowsPE">
-
-   <component name="Microsoft-Windows-Setup" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" processorArchitecture="amd64">
-    <UserData>
-     <AcceptEula>true</AcceptEula>
-    </UserData>
-
-<DiskConfiguration>
-  <Disk wcm:action="add">
-    <DiskID>0</DiskID> 
-    <WillWipeDisk>true</WillWipeDisk> 
-    <CreatePartitions>
-
-      <!-- Recovery partition -->
-      <CreatePartition wcm:action="add">
-        <Order>1</Order> 
-        <Type>Primary</Type> 
-        <Size>250</Size> 
-      </CreatePartition>
-
-      <!-- EFI system partition (ESP) -->
-      <CreatePartition wcm:action="add">
-        <Order>2</Order> 
-        <Type>EFI</Type> 
-        <Size>100</Size> 
-      </CreatePartition>
-
-      <!-- Microsoft reserved partition (MSR) -->
-      <CreatePartition wcm:action="add">
-        <Order>3</Order> 
-        <Type>MSR</Type> 
-        <Size>128</Size> 
-      </CreatePartition>
-
-      <!-- Windows partition -->
-      <CreatePartition wcm:action="add">
-        <Order>4</Order> 
-        <Type>Primary</Type> 
-        <Extend>true</Extend> 
-      </CreatePartition>
-
-    </CreatePartitions>
-    <ModifyPartitions>
-
-      <!-- Recovery partition -->
-      <ModifyPartition wcm:action="add">
-        <Order>1</Order> 
-        <PartitionID>1</PartitionID> 
-        <Label>Recovery</Label> 
-        <Format>NTFS</Format> 
-        <TypeID>de94bba4-06d1-4d40-a16a-bfd50179d6ac</TypeID> 
-      </ModifyPartition>
-
-      <!-- EFI system partition (ESP) -->
-      <ModifyPartition wcm:action="add">
-        <Order>2</Order>
-        <PartitionID>2</PartitionID>
-        <Label>System</Label>
-        <Format>FAT32</Format>
-      </ModifyPartition>
-
-      <!-- MSR partition does not need to be modified -->
-
-      <!-- Windows partition -->
-      <ModifyPartition wcm:action="add">
-        <Order>3</Order>
-        <PartitionID>4</PartitionID>
-        <Label>Windows</Label>
-        <Format>NTFS</Format>
-      </ModifyPartition>
-
-    </ModifyPartitions>
-  </Disk>
-  	<WillShowUI>OnError</WillShowUI> 
-</DiskConfiguration>
-
-    <ComplianceCheck>
-     <DisplayReport>OnError</DisplayReport>
-    </ComplianceCheck>
-
-    <ImageInstall>
-     <OSImage>
-      <InstallFrom>
-       <MetaData wcm:action="add">
-        <Key>/IMAGE/INDEX</Key>
-        <Value>1</Value>
-       </MetaData>
-      </InstallFrom>
-      <InstallTo>
-       <DiskID>0</DiskID>
-       <PartitionID>4</PartitionID>
-      </InstallTo>
-      <WillShowUI>OnError</WillShowUI>
-      <InstallToAvailablePartition>false</InstallToAvailablePartition>
-     </OSImage>
-    </ImageInstall>
-   </component>
-
-   <component name="Microsoft-Windows-International-Core-WinPE" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" processorArchitecture="amd64">
-    <InputLocale>en-us</InputLocale>
-    <SystemLocale>en-us</SystemLocale>
-    <UILanguage>en-us</UILanguage>
-    <UserLocale>en-us</UserLocale>
-   </component>
-
-  </settings>
-
-
+<?xml version="1.0" encoding="utf-8"?>
+<unattend xmlns="urn:schemas-microsoft-com:unattend">
+    <settings pass="windowsPE">
+        <component name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <DiskConfiguration>
+                <Disk wcm:action="add">
+                    <CreatePartitions>
+                        <CreatePartition wcm:action="add">
+                            <Order>1</Order>
+                            <Size>500</Size>
+                            <Type>Primary</Type>
+                        </CreatePartition>
+                        <CreatePartition wcm:action="add">
+                            <Order>3</Order>
+                            <Size>16</Size>
+                            <Type>MSR</Type>
+                        </CreatePartition>
+                        <CreatePartition wcm:action="add">
+                            <Order>2</Order>
+                            <Size>100</Size>
+                            <Type>EFI</Type>
+                        </CreatePartition>
+                        <CreatePartition wcm:action="add">
+                            <Extend>true</Extend>
+                            <Order>4</Order>
+                            <Type>Primary</Type>
+                        </CreatePartition>
+                    </CreatePartitions>
+                    <ModifyPartitions>
+                        <ModifyPartition wcm:action="add">
+                            <Format>NTFS</Format>
+                            <Label>WinRE</Label>
+                            <Order>1</Order>
+                            <PartitionID>1</PartitionID>
+                            <TypeID>DE94BBA4-06D1-4D40-A16A-BFD50179D6AC</TypeID>
+                        </ModifyPartition>
+                        <ModifyPartition wcm:action="add">
+                            <Format>FAT32</Format>
+                            <Label>System</Label>
+                            <PartitionID>2</PartitionID>
+                            <Order>2</Order>
+                        </ModifyPartition>
+                        <ModifyPartition wcm:action="add">
+                            <Order>3</Order>
+                            <PartitionID>3</PartitionID>
+                        </ModifyPartition>
+                        <ModifyPartition wcm:action="add">
+                            <Format>NTFS</Format>
+                            <Label>Windows</Label>
+                            <Letter>C</Letter>
+                            <Order>4</Order>
+                            <PartitionID>4</PartitionID>
+                        </ModifyPartition>
+                    </ModifyPartitions>
+                    <DiskID>0</DiskID>
+                    <WillWipeDisk>true</WillWipeDisk>
+                </Disk>
+                <WillShowUI>OnError</WillShowUI>
+            </DiskConfiguration>
+            <ImageInstall>
+                <OSImage>
+                    <InstallTo>
+                        <DiskID>0</DiskID>
+                        <PartitionID>4</PartitionID>
+                    </InstallTo>
+                </OSImage>
+            </ImageInstall>
+            <UserData>
+                <ProductKey>
+                    <Key>VK7JG-NPHTM-C97JM-9MPGT-3V66T</Key>
+                </ProductKey>
+                <AcceptEula>true</AcceptEula>
+                <Organization>DF</Organization>
+            </UserData>
+        </component>
+        <component name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <SetupUILanguage>
+                <UILanguage>fr-CH</UILanguage>
+            </SetupUILanguage>
+            <InputLocale>fr-CH</InputLocale>
+            <SystemLocale>fr-CH</SystemLocale>
+            <UILanguage>fr-CH</UILanguage>
+            <UserLocale>fr-CH</UserLocale>
+            <UILanguageFallback>en-US</UILanguageFallback>
+        </component>
+    </settings>
+    <settings pass="specialize">
+        <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <OEMInformation>
+                <SupportURL>https://www.d-factos.ch</SupportURL>
+            </OEMInformation>
+            <TimeZone>W. Europe Standard Time</TimeZone>
+            <OEMName>d-factos SA</OEMName>
+            <CopyProfile>true</CopyProfile>
+        </component>
+    </settings>
+    <settings pass="oobeSystem">
+        <component name="Microsoft-Windows-International-Core" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <InputLocale>fr-CH</InputLocale>
+            <SystemLocale>fr-CH</SystemLocale>
+            <UILanguage>fr-CH</UILanguage>
+            <UILanguageFallback>en-US</UILanguageFallback>
+            <UserLocale>fr-CH</UserLocale>
+        </component>
+        <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <OOBE>
+                <HideEULAPage>true</HideEULAPage>
+                <HideOEMRegistrationScreen>true</HideOEMRegistrationScreen>
+                <HideOnlineAccountScreens>true</HideOnlineAccountScreens>
+                <HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
+                <ProtectYourPC>1</ProtectYourPC>
+            </OOBE>
+            <UserAccounts>
+                <LocalAccounts>
+                    <LocalAccount wcm:action="add">
+                        <Password>
+                            <Value>RABlAEYAYQBjAHQAbwAtADcAMABQAGEAcwBzAHcAbwByAGQA</Value>
+                            <PlainText>false</PlainText>
+                        </Password>
+                        <Description>admin d-factoa</Description>
+                        <DisplayName>dfadmin</DisplayName>
+                        <Name>dfadmin</Name>
+                        <Group>Administrators</Group>
+                    </LocalAccount>
+                </LocalAccounts>
+            </UserAccounts>
+            <FirstLogonCommands>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd /c powershell -ExecutionPolicy ByPass while (-Not (Test-Connection 1.1.1.1 -Quiet)) { Write-Host &quot;No internet connection available, please connect to it&quot;; Start-Sleep -s 5; }</CommandLine>
+                    <Order>1</Order>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <Order>3</Order>
+                    <CommandLine>cmd /c powershell -ExecutionPolicy ByPass -File C:\Windows\Temp\firststart.ps1</CommandLine>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd /c powershell -ExecutionPolicy ByPass Invoke-WebRequest -Uri https://git.io/JtZnc -OutFile C:\Windows\Temp\firststart.ps1</CommandLine>
+                    <Order>2</Order>
+                </SynchronousCommand>
+            </FirstLogonCommands>
+        </component>
+    </settings>
+    <cpi:offlineImage cpi:source="wim:c:/ict/windowsimage/sources/install.wim#Windows 10 Pro" xmlns:cpi="urn:schemas-microsoft-com:cpi" />
 </unattend>
